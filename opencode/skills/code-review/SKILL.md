@@ -163,3 +163,5 @@ To publish findings (e.g. `/review-pr`), load the `gh-cli` skill — its
 - Follow AGENTS.md quality and comment rules.
 - Cite concrete `file:line` locations.
 - No performative positivity or inflated severity.
+- Review independently — do not anchor on the implementer's summary or prior
+  review comments; form your own read of the diff first, then reconcile.

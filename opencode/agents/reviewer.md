@@ -47,3 +47,6 @@ critical+major; surface only what survives scrutiny (AGENTS.md Self-Verification
 - Surface blockers, not every nitpick; flag style nits only when they compound.
 - Be specific: "line 42 has an off-by-one because..." beats "this looks wrong".
 - If the code is genuinely good, say so in one line — never performative positivity.
+- For a high-stakes diff where a single-pass miss is costly, you may note that a
+  second independent reviewer pass (fresh reviewer) would add value — but never
+  spawn it yourself (read-only, no task tool).

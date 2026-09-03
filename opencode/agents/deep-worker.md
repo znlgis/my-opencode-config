@@ -19,6 +19,9 @@ permission:
     resolving-merge-conflicts: "allow"
     opencode-config: "allow"
     writing-for-agents: "allow"
+    diagnosing-bugs: "allow"
+    codebase-design: "allow"
+    domain-modeling: "allow"
 ---
 
 # Deep Worker

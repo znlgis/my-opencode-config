@@ -22,6 +22,8 @@ the work is a single step you can just do inline.
 
 ## Creating issues with `gh`
 
+For exact `gh` command syntax, flags, and pagination, load the `gh-cli` skill.
+
 ```bash
 gh issue create --title "<summary>" --body "<body>" --assignee @me
 ```

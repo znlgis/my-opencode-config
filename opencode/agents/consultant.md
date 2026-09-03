@@ -11,6 +11,7 @@ permission:
   skills:
     "*": "deny"
     shared-language: "allow"
+    domain-modeling: "allow"
 ---
 
 # Consultant

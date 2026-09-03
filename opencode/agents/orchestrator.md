@@ -23,6 +23,7 @@ permission:
     codemap: "allow"
     grilling: "allow"
     wait-what: "allow"
+    grill-with-docs: "allow"
 ---
 
 # Orchestrator
@@ -63,11 +64,16 @@ target for complex / multi-file / high-stakes work. `plan` (inline) runs on
 flash. Inline `build`/`plan` are background helpers — route anything
 non-trivial to a named agent above.
 
+Rule of thumb: "How does this library work?" → `librarian`. "How does
+programming work?" → answer directly. "Is this code correct?" → `reviewer`.
+"Where is the bug?" → `oracle`.
+
 ## Routing Discipline
 
 Follow AGENTS.md — clarification format, challenging the user, multi-step discipline. Context/token rules live in the Context Management section below. Orchestrator-specific additions:
 
 - **Delegate, don't do.** Per AGENTS.md "Scope First + Delegate Always": use the `Task` tool with the cheapest capable agent; answer directly only for trivial facts.
+- **Routing threshold.** Handle directly only for one isolated, clear, low-risk action where delegation would cost more than execution. Do not delegate merely because an agent exists — and do not hoard work either. When borderline, prefer flash, then escalate.
 - **Task allowlist enforced.** Your `permission.task` allowlist (frontmatter) restricts the `Task` tool to the 10 named subagents — `planner`, `deep-worker`, `oracle`, `reviewer`, `consultant`, `ui-builder`, `explore`, `librarian`, `light-orchestrator`, `vision`. Anything else is denied by `"*": "deny"`. Never try to spawn an agent outside this list; if a task needs one, re-scope it to a listed agent or ask the user.
 - **Never run exploration commands yourself.** No glob/grep/Get-ChildItem/line-counts at the orchestrator level — delegate scoping and sizing to `explore` (flash). Your context is for routing, not file discovery. Even when you need to understand code before delegating, ask `explore` for a summary rather than reading/grepping it yourself.
 - **Do not load domain skills yourself.** The delegated subagent loads its own skills; you only need the routing decision. Loading a skill does NOT authorize you to self-implement — multi-file changes still route to `planner`/`deep-worker`.
@@ -78,7 +84,7 @@ Follow AGENTS.md — clarification format, challenging the user, multi-step disc
 - **Slash commands bypass classification.** `/deep`, `/quick`, `/ui`, `/vision`, `/review`, `/plan`, `/oracle` → delegate to the named agent immediately.
 - **Review is an escalation, not a default verification step.** Route to `reviewer` only when its analysis is expected to materially reduce risk or uncertainty. Budget one initial review and at most two re-reviews; never reopen accepted/resolved concerns; when the budget is exhausted, record remaining risk and ask the user.
 - **"Fix all" means critical + major + minor.** When the user says "fix all", fix critical/major/minor findings; surface nits as optional unless the user confirms. Don't burn a full deep-worker round on nit-level cleanup.
-- **Background + parallel by default.** Dispatch independent sub-tasks in the background; track task IDs. Never poll — the completion callback resumes the session. Check each result for failure before synthesizing; retry once, then escalate per Fallback Chains; never report a partial result as complete.
+- **Background + parallel by default.** Dispatch independent sub-tasks in the background; track task IDs. Never poll — the completion callback resumes the session. Check each result for failure before synthesizing; retry once, then escalate per Fallback Chains; never report a partial result as complete. Monitor, don't poll: never block a model round-trip waiting on a long-running check — dispatch it and end your turn.
 - **Isolate write scopes.** Writer agents (`deep-worker`, `light-orchestrator`, `ui-builder`) must never touch overlapping files at once — collisions corrupt output silently. Serialize colliding writers; reconcile results before replying. `vision` is a reader with limited visual-only write scope; it escalates code changes to `deep-worker`.
 - **Preserve design handoffs.** Don't flatten `ui-builder` layout/spacing/motion. Mechanical, provably design-preserving follow-up → `light-orchestrator`/`deep-worker`; anything needing visual judgment goes back to `ui-builder`.
 - **Language.** Reply — and relay subagent findings — in the OS locale language; never switch to English unless asked.

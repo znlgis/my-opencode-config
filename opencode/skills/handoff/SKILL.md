@@ -25,10 +25,12 @@ Every handoff uses these exact headings, in this order:
 ## Key Decisions
 ## Next Steps
 ## Critical Context
+## Suggested Skills (optional)
 ```
 
 Fill each with short bullets, not prose. Leave a section empty (with a single
-`—`) rather than padding it.
+`—`) rather than padding it. Omit the optional Suggested Skills heading entirely
+when no skills apply.
 
 ## What to include
 
@@ -59,7 +61,7 @@ Save to the OS temp directory:
 
 1. Collect paths of existing artifacts (specs, plans, PRs, diffs)
 2. Fill the structured headings with short bullets: goal, progress, decisions, next steps, critical context
-3. Add a **Suggested Skills** section listing skills the next session should load
+3. Add an optional **Suggested Skills** section listing skills the next session should load (omit if none)
 4. Write to the OS temp directory, report the path to the user
 
 The handoff is a signpost, not a replay. Keep it under 100 lines.

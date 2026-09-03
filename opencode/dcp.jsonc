@@ -45,6 +45,7 @@
   // Compression strategy — tuned for DeepSeek V4 (1M context window)
   // Core principle: proactive compression > passive overflow; DCP compresses proactively at the 77K threshold, native auto compaction is the near-overflow fallback — the two complement each other
   // Division of labor: built-in compaction handles auto-trigger + prune (opencode.jsonc); DCP handles proactive dedup + compression thresholds. The two complement each other.
+  // Per-model overrides (modelMaxLimits/modelMinLimits) let pro compress earlier than flash — pro input costs 3x flash.
   // ══════════════════════════════════════════════════════════════
   "compress": {
     // range mode: compress a contiguous conversation range into a high-fidelity summary
@@ -60,6 +61,16 @@
     // Use absolute token values instead to restore the intended ~77K/38K proactive compression, decoupled from the model window.
     "maxContextLimit": 77000,
     "minContextLimit": 38000,
+
+    // Per-model overrides (keyed by exact 'providerID/modelID'). Pro input costs
+    // 3x flash (0.66 vs 0.22 per 1M), so compress pro sessions EARLIER to cut the
+    // expensive window; flash/vision keep the global 77K/38K baseline.
+    "modelMaxLimits": {
+      "deepseek/deepseek-v4-pro": 55000
+    },
+    "modelMinLimits": {
+      "deepseek/deepseek-v4-pro": 26000
+    },
 
     // Remind compression every 3 LLM requests (more frequent than default 5, tuned for token efficiency)
     "nudgeFrequency": 3,

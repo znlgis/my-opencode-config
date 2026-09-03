@@ -15,6 +15,8 @@ chores, who owns what.
 
 ## Workflow
 
+For exact `gh` command syntax, flags, and pagination, load the `gh-cli` skill.
+
 1. Pull: `gh issue list --state open --search "<filters>" --json number,title,labels`
    (or `--label <name>` to scope to a label). Raise `-L` for large batches.
 2. Classify: bucket each issue by type and severity from its title/body — not

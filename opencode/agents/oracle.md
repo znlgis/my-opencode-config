@@ -25,6 +25,7 @@ permission:
     "*": "deny"
     reflect: "allow"
     simplify: "allow"
+    diagnosing-bugs: "allow"
 ---
 
 # Oracle

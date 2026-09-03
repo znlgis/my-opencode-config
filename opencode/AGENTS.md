@@ -51,6 +51,10 @@ orchestrator prompt (`agents/orchestrator.md`).
   single-shot tasks run on flash so their volatile content never enters the
   pro prompt-cache prefix.
 - **reasoning_content** must round-trip on tool calls (opencode handles it); never reorder messages in ways that break it.
+- **Volatile zone.** Timestamps, random IDs, per-request tokens, and dynamic file
+  lists are volatile — they bust the prefix cache if they appear early. Keep
+  them out of the head of any payload; append them near the tail where a cache
+  miss costs the least.
 
 ## Scope First + Delegate Always
 
@@ -186,7 +190,12 @@ grep sweep covers all edits in a phase. Do not re-verify after every small edit
 batch — that is a bonus verification loop (Core Principle 8).
 
 Evidence precedes assertion — a passing build, clean lint, end-to-end read, or
-a grep showing no broken callers.
+a grep showing no broken callers. A passing build or clean lint is evidence;
+"it typechecks" alone is not QA for a behavior change.
+
+Set a verification budget up front — choose the minimum non-duplicative evidence
+that covers your claims. Small mechanical changes follow ordinary project checks
+directly; only high-risk changes warrant the full loop.
 
 ## Plugins
 

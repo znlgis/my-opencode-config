@@ -1,11 +1,11 @@
 ---
 name: gh-cli
-description: Patterns for invoking the GitHub CLI (gh v2.98.0+) from agents. Use when the task mentions GitHub, gh, pull requests/PRs, issues, releases, gists, Actions/workflow runs, forks, repo cloning, reviews, or you need exact gh commands. Covers pagination, repo targeting, search vs list, discussions, projects, rulesets, skills, and gh api fallback.
+description: Patterns for invoking the GitHub CLI (gh v2.99.0+) from agents. Use when the task mentions GitHub, gh, pull requests/PRs, issues, releases, gists, Actions/workflow runs, forks, repo cloning, reviews, or you need exact gh commands. Covers pagination, repo targeting, search vs list, discussions, projects, rulesets, skills, and gh api fallback.
 ---
 
 # GitHub CLI (`gh`) agent patterns
 
-Authoritative patterns for driving the official `gh` CLI (v2.98.0) from agents,
+Authoritative patterns for driving the official `gh` CLI (v2.99.0) from agents,
 based on [cli/cli](https://github.com/cli/cli) trunk. Prefer `gh` over raw `curl`
 or `gh api` — `gh` handles auth, pagination, and JSON output automatically.
 
@@ -43,7 +43,7 @@ Other v2.96.0 / v2.97.0 fixes (advisory → impact → rule):
 | GHSA-4fjg-2h4q-fwg3 | Some REST request URLs built without escaping variable path segments → path traversal; a crafted name redirects `gh` to a different resource than intended. | Upgrade 2.97.0; be cautious with untrusted repo/input names. |
 | GHSA-8cg3-r6g9-fpg2 | `gh codespace jupyter` opens the codespace-supplied URL unvalidated; a malicious codespace returns a `vscode://` link → command execution on the host (variant of GHSA-p2h2-3vg9-4p87 / CVE-2024-52308). | Upgrade ≥2.96.0; only use trusted codespaces. |
 
-## Security Advisory — codespace port forwarding (v2.98.0)
+## Security Advisory — codespace port forwarding (v2.99.0)
 
 GHSA-vfhh-p7hm-pxfh: `gh codespace ports` forwards container ports to the host
 and, by default, binds them to **all interfaces** (0.0.0.0), not just localhost,
@@ -111,7 +111,7 @@ override. Set `GH_REPO=OWNER/REPO` for session-wide default.
 - Full qualifier syntax (v2.79.0+): `author:`, `label:`, `milestone:`, `assignee:`,
   `review:`, `status:`, `base:`, `head:`, `merged:`, `created:`, `updated:`,
   `closed:`, `comments:`, `interactions:`, `reactions:`.
-- `gh search issues --search-type <lexical|semantic|hybrid>` (v2.98+): semantic
+- `gh search issues --search-type <lexical|semantic|hybrid>` (v2.99+): semantic
   relevance-ranked search, default `lexical`. `semantic`/`hybrid` are issue-only
   (reject `--include-prs`, `--sort`/`--order`, `--web`), bound to one page
   (separate 10/min bucket), github.com/ghe.com only — not single-tenant GHES.
@@ -164,7 +164,7 @@ gh pr checks <n> [--watch] [--fail-fast] [-i/--interval <sec>] [--required]
 - --fail-fast: exit on first failure.
 - --required: only show required checks.
 - JSON `bucket` field groups checks by state (pending/pass/fail).
-- Exit code 8 = checks failed (distinct from 1 = command error).
+- Exit code 8 = checks PENDING (distinct from 1 = command error).
 - --json and --watch are mutually exclusive.
 
 ## `gh api` — the universal fallback
@@ -265,6 +265,7 @@ v2.96.0+) to fetch artifacts.
 `--attach <path>` works on `gh issue`/`gh pr` `create`/`edit`/`comment`, repeatable
 up to 50 per item. Formats: png/jpg/gif/webp/svg (images) and mp4/mov/webm
 (video). Image alt text follows a `#` suffix: `--attach 'shot.png#crash screenshot'`.
+GitHub.com + GHEC only — not supported on GHES.
 
 gh issue create --title "crash" --attach shot.png#crash --attach repro.mp4
 
@@ -280,9 +281,9 @@ gh issue create --title "crash" --attach shot.png#crash --attach repro.mp4
 - `gh secret` / `gh variable` — set/list/remove; scoped repo/org/env. `gh codespace` — `list`/`create`/`stop`/`delete`/`logs`/`ssh`/`ports`.
 - `gh config` — `set`/`get`/`list`/`clear-cache` (editor, git_protocol, prompt). `gh extension` — `install`/`list`/`upgrade`/`remove`/`search`/`create` (no auth since v2.90.0). `gh alias` — `set`/`list`/`delete`; `--shell` pipes to editors.
 - `gh copilot` — native built-in (v2.86.0+), agent-driven + human-in-the-loop; not for unattended scripts. `gh agent-task` (alias `gh agent`/`gh agents`) — delegates coding tasks; requires `gho_` OAuth token.
-- `gh pr create --reviewer @copilot` / `gh issue edit --add-assignee @copilot` — request Copilot review/assignment. `gh pr revert <n>`, `gh pr update-branch <n>`, `gh pr checkout` (alias `gh co`; `--worktree <path>` checks out the PR in an isolated git worktree, v2.98.0+), `gh pr create --fill-first/--dry-run/--recover <token>`.
+- `gh pr create --reviewer @copilot` / `gh issue edit --add-assignee @copilot` — request Copilot review/assignment. `gh pr revert <n>`, `gh pr update-branch <n>`, `gh pr checkout` (alias `gh co`; `--worktree <path>` checks out the PR in an isolated git worktree, v2.99.0+), `gh pr create --fill-first/--dry-run/--recover <token>`.
 - `gh run watch <id> --exit-status`, `gh run cancel <id> --force`, `gh run rerun <id> --failed`. `gh attestation verify|download -R owner/repo` — Sigstore supply-chain.
-- `gh issue develop <n>` — linked branches; `gh org list`; `gh label clone`; `gh browse --blame/--actions`; `gh status`. `gh preview prompter` — experimental; do not depend on it.
+- `gh issue develop <n>` — linked branches; `--checkout` checks out the branch, `--worktree <path>` checks it out in an isolated git worktree (leaves cwd unchanged); `gh org list`; `gh label clone`; `gh browse --blame/--actions`; `gh status`. `gh preview prompter` — experimental; do not depend on it.
 
 ## Quick reference
 

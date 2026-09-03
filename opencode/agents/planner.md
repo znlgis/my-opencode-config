@@ -11,6 +11,7 @@ permission:
   skills:
     "*": "deny"
     spec-workflow: "allow"
+    codebase-design: "allow"
 ---
 
 # Planner

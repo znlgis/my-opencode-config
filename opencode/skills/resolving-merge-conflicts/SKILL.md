@@ -15,7 +15,7 @@ When facing an in-progress git merge or rebase with conflicts:
 
 4. **Run automated checks.** Discover the project's verification commands from `package.json` scripts, `Makefile`, or `AGENTS.md`. Run typecheck, tests, then format. Fix anything the merge broke.
 
-5. **Finish.** Stage everything (`git add .`), commit (`git commit` without `-m` — review the auto-generated merge message), or if rebasing, `git rebase --continue` until all commits are rebased.
+5. **Finish.** Stage the resolved files by explicit path (`git add <path1> <path2>`, or `git add -u` for tracked files only — never `git add .` or `git add <dir>`, per AGENTS.md Git Safety), commit (`git commit` without `-m` — review the auto-generated merge message), or if rebasing, `git rebase --continue` until all commits are rebased.
 
 ## Rules
 

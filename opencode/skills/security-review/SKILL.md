@@ -54,7 +54,8 @@ code unless explicitly asked.
 
 ## Report format
 
-critical/major are blockers; minor/nit are suggestions.
+critical/major are blockers; minor/nit are suggestions. Severity levels match the
+code-review skill (critical/major = blockers; minor/nit = suggestions).
 
 For each finding:
 
