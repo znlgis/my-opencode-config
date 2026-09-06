@@ -1,11 +1,11 @@
 ---
 name: gh-cli
-description: Patterns for invoking the GitHub CLI (gh v2.99.0+) from agents. Use when the task mentions GitHub, gh, pull requests/PRs, issues, releases, gists, Actions/workflow runs, forks, repo cloning, reviews, or you need exact gh commands. Covers pagination, repo targeting, search vs list, discussions, projects, rulesets, skills, and gh api fallback.
+description: Patterns for invoking the GitHub CLI (gh v2.100.0+) from agents. Use when the task mentions GitHub, gh, pull requests/PRs, issues, releases, gists, Actions/workflow runs, forks, repo cloning, reviews, or you need exact gh commands. Covers pagination, repo targeting, search vs list, discussions, projects, rulesets, skills, and gh api fallback.
 ---
 
 # GitHub CLI (`gh`) agent patterns
 
-Authoritative patterns for driving the official `gh` CLI (v2.99.0) from agents,
+Authoritative patterns for driving the official `gh` CLI (v2.100.0) from agents,
 based on [cli/cli](https://github.com/cli/cli) trunk. Prefer `gh` over raw `curl`
 or `gh api` — `gh` handles auth, pagination, and JSON output automatically.
 
@@ -111,7 +111,7 @@ override. Set `GH_REPO=OWNER/REPO` for session-wide default.
 - Full qualifier syntax (v2.79.0+): `author:`, `label:`, `milestone:`, `assignee:`,
   `review:`, `status:`, `base:`, `head:`, `merged:`, `created:`, `updated:`,
   `closed:`, `comments:`, `interactions:`, `reactions:`.
-- `gh search issues --search-type <lexical|semantic|hybrid>` (v2.99+): semantic
+- `gh search issues --search-type <lexical|semantic|hybrid>` (v2.98.0+): semantic
   relevance-ranked search, default `lexical`. `semantic`/`hybrid` are issue-only
   (reject `--include-prs`, `--sort`/`--order`, `--web`), bound to one page
   (separate 10/min bucket), github.com/ghe.com only — not single-tenant GHES.
@@ -201,6 +201,8 @@ OpenAPI preview; `--allow-escape-sequences` preserves raw escapes. There is
 - `gh auth status --json` — active host, user, auth source
 - `GH_TOKEN` / `GITHUB_TOKEN` env vars for non-interactive/CI use
 - `GH_ENTERPRISE_TOKEN` for GHES, `GH_HOST` for enterprise instances
+- v2.100.0+ experimental `api_host` config (`gh config set api_host <host>`) overrides
+  the API base host independently of `GH_HOST`; experimental — do not depend on it.
 - `@me` resolves to the authenticated user (`--assignee @me`, `--author @me`)
 - Never paste tokens on the command line; use `--with-token < file` or env vars
 

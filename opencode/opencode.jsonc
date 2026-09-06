@@ -57,15 +57,6 @@
     // toggle — {"type":"enabled"|"disabled"}).
     "provider": {
         "deepseek": {
-            // DeepSeek's OpenAI-compatible gateway has two pitfalls: reasoning
-            // models reject a system prompt sent as role:"developer", and an
-            // output limit sent as max_completion_tokens is also rejected.
-            // These compat flags make OpenCode fall back to role:"system" and
-            // the max_tokens field instead.
-            "compat": {
-                "supportsDeveloperRole": false,
-                "maxTokensField": "max_tokens"
-            },
             // `cost` is USD per 1M tokens, off-peak rates effective with the
             // 2026-08-16 peak/off-peak pricing; peak hours charge double these
             // values. DeepSeek publishes no standalone cache-write price —
@@ -157,7 +148,8 @@
     // Bound image token cost for the vision-exp model. DeepSeek downscales
     // images to ~800x800 internally, so oversized uploads only waste base64
     // bytes. Resize anything above 1600px / 2MB before it reaches the API.
-    "attachments": {
+    // Key is singular `attachment` (schema-valid); the plural form is ignored.
+    "attachment": {
         "image": {
             "auto_resize": true,
             "max_width": 1600,
